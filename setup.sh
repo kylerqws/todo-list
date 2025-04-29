@@ -10,8 +10,4 @@ docker run --rm \
 
       composer require laravel/sail --dev && composer install;
       php artisan sail:install --with=mariadb;
-
-      composer require laravel/breeze;
-      php artisan breeze:install;
-      php artisan migrate;
     "
