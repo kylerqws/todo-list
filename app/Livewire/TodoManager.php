@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class TodoManager extends Component
@@ -21,18 +22,13 @@ class TodoManager extends Component
         $this->todos = Auth::user()->todos()->get();
     }
 
-    public function createTodo(): void
+    #[On('todo-created')]
+    public function addTodo(int $id): void
     {
-        $this->validate([
-            'todoName' => 'required|min:3',
-        ]);
+        $todo = Auth::user()->todos()->find($id);
+        $this->authorize('view', $todo);
 
-        $todo = Auth::user()->todos()->create([
-            'name' => $this->pull('todoName'),
-        ]);
-
-        $this->reset('todoName');
-        $this->todos->push($todo);
+        $this->todos->prepend($todo);
     }
 
     public function deleteTodo(int $id): void
