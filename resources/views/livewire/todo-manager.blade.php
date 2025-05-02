@@ -1,4 +1,6 @@
-<div>
+<div class="p-6">
     <livewire:todo-form />
-    <livewire:todo-list />
+    <div class="ml-3">
+        <livewire:todo-list />
+    </div>
 </div>
