@@ -1,9 +1,9 @@
 <div class="p-2">
     @isset($todos)
         @foreach($todos as $todo)
-            <div wire:key='{{ $todo->id }}' class="flex items-center h-14">
-                <button type="button" wire:click="toggleStatus({{ $todo->id }})"
-                        class="w-6 h-6 relative focus:outline-none">
+            <div wire:key='{{ $todo->id }}' class="flex items-center h-14 p-2">
+                <button wire:click="toggleStatus({{ $todo->id }})" wire:loading.attr="disabled"
+                        class="px-2 rounded-md dark:hover:text-gray-100 dark:active:text-gray-300 transition ease-in-out duration-150 relative focus:outline-none">
                     @if ($todo->status)
                         <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none">
                             <circle cx="12" cy="12" r="10" stroke="#f97316" stroke-width="2" />
@@ -15,12 +15,14 @@
                         </svg>
                     @endif
                 </button>
-                <div class="w-full ml-3">{{ $todo->name }}</div>
-                <div class="px-2 ml-3">
-                    <x-danger-button wire:click="deleteTodo({{ $todo->id }})" wire:loading.attr="disabled">
-                        {{ __('Delete') }}
-                    </x-danger-button>
-                </div>
+                <div class="w-full px-3">{{ $todo->name }}</div>
+                <button wire:click="deleteTodo({{ $todo->id }})" wire:loading.attr="disabled"
+                        class="px-5 rounded-md dark:hover:text-gray-100 dark:active:text-gray-300 transition ease-in-out duration-150 relative focus:outline-none">
+                    <svg class="w-4 h-4" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor"
+                              d="M4.11 2.697L2.698 4.11 6.586 8l-3.89 3.89 1.415 1.413L8 9.414l3.89 3.89 1.413-1.415L9.414 8l3.89-3.89-1.415-1.413L8 6.586l-3.89-3.89z" />
+                    </svg>
+                </button>
             </div>
         @endforeach
     @endisset
