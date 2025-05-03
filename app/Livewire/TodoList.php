@@ -39,4 +39,12 @@ class TodoList extends Component
 
         $todo->delete();
     }
+
+    public function toggleStatus(int $id): void
+    {
+        $todo = $this->todos()->find($id);
+        $this->authorize('update', $todo);
+
+        $todo->update(attributes: ['status' => !$todo->status]);
+    }
 }
