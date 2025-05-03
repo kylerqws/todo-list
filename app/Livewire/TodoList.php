@@ -17,6 +17,14 @@ class TodoList extends Component
         ]);
     }
 
+    #[Computed]
+    public function todos(): Collection
+    {
+        return Auth::user()->todos()
+            ->orderByDesc('created_at')
+            ->get();
+    }
+
     #[On('todo-created')]
     public function addTodo(int $id): void
     {
@@ -30,11 +38,5 @@ class TodoList extends Component
         $this->authorize('delete', $todo);
 
         $todo->delete();
-    }
-
-    #[Computed]
-    private function todos(): Collection
-    {
-        return Auth::user()->todos()->orderByDesc('created_at')->get();
     }
 }
