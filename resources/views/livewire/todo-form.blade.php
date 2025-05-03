@@ -2,7 +2,7 @@
     <form wire:submit.prevent="createTodo">
         <div class="flex items-center">
             <x-text-input wire:model="todoName" class="w-full" placeholder="{{ __('Enter todo...') }}" />
-            <div class="px-2">
+            <div class="px-2 ml-3">
                 <x-primary-button wire:loading.attr="disabled">
                     {{ __('Create') }}
                 </x-primary-button>
