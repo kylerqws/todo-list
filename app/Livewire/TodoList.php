@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Auth;
 
 class TodoList extends Component
 {
+    public ?bool $filterStatus;
+
+    public string $titleList = '';
+    public string $titleEmptyList = '';
+
     public function render(): object
     {
         return view('livewire.todo-list', [
@@ -20,16 +25,22 @@ class TodoList extends Component
     #[Computed]
     public function todos(): Collection
     {
-        return Auth::user()->todos()
+        $query = Auth::user()->todos();
+
+        if (is_bool($this->filterStatus)) {
+            $query->where('status', $this->filterStatus);
+        }
+
+        return $query
+            ->orderBy('status')
             ->orderByDesc('created_at')
             ->get();
     }
 
-    #[On('todo-created')]
-    public function addTodo(int $id): void
+    #[On('todo-created'),On('todo-updated'),On('todo-deleted')]
+    public function refresh(): void
     {
-        $todo = $this->todos()->find($id);
-        $this->authorize('view', $todo);
+        // refresh component after modify todos list
     }
 
     public function deleteTodo(int $id): void
@@ -38,6 +49,7 @@ class TodoList extends Component
         $this->authorize('delete', $todo);
 
         $todo->delete();
+        $this->dispatch('todo-deleted', id: $todo->id);
     }
 
     public function toggleStatus(int $id): void
@@ -46,5 +58,6 @@ class TodoList extends Component
         $this->authorize('update', $todo);
 
         $todo->update(attributes: ['status' => !$todo->status]);
+        $this->dispatch('todo-updated', id: $todo->id);
     }
 }
